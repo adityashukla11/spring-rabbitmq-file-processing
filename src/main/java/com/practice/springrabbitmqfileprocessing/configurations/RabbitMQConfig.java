@@ -43,14 +43,14 @@ public class RabbitMQConfig {
 //        return container;
 //    }
 
-    @Bean
-    public MessageConverter jsonToMapMessageConverter() {
-        DefaultClassMapper defaultClassMapper = new DefaultClassMapper();
-        defaultClassMapper.setTrustedPackages("com.practice.springrabbitmqfileprocessing.domain"); // trusted packages
-        Jackson2JsonMessageConverter jackson2JsonMessageConverter = new Jackson2JsonMessageConverter();
-        jackson2JsonMessageConverter.setClassMapper(defaultClassMapper);
-        return jackson2JsonMessageConverter;
-    }
+//    @Bean
+//    public MessageConverter jsonToMapMessageConverter() {
+//        DefaultClassMapper defaultClassMapper = new DefaultClassMapper();
+////        defaultClassMapper.setTrustedPackages("com.practice.springrabbitmqfileprocessing.domain, com.practice.springrabbitmqinvoiceconsumer.domain"); // trusted packages
+//        Jackson2JsonMessageConverter jackson2JsonMessageConverter = new Jackson2JsonMessageConverter();
+//        jackson2JsonMessageConverter.setClassMapper(defaultClassMapper);
+//        return jackson2JsonMessageConverter;
+//    }
 
 //    @Bean
 //    MessageListenerAdapter listenerAdapter(InvoiceDetailsReceiver receiver) {
@@ -61,13 +61,13 @@ public class RabbitMQConfig {
 //        return messageListenerAdapter;
 //    }
 
-    @Bean
-    RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory, final MessageConverter messageConverter)
-    {
-        final RabbitTemplate rabbitTemplate = new RabbitTemplate();
-        rabbitTemplate.setConnectionFactory(connectionFactory);
-        rabbitTemplate.setMessageConverter(messageConverter);
-        return rabbitTemplate;
-    }
+//    @Bean
+//    RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory, final MessageConverter messageConverter)
+//    {
+//        final RabbitTemplate rabbitTemplate = new RabbitTemplate();
+//        rabbitTemplate.setConnectionFactory(connectionFactory);
+//        rabbitTemplate.setMessageConverter(messageConverter);
+//        return rabbitTemplate;
+//    }
 
 }

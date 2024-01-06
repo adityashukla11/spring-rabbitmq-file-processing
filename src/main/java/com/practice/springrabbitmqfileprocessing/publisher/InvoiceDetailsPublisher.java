@@ -1,9 +1,14 @@
 package com.practice.springrabbitmqfileprocessing.publisher;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practice.springrabbitmqfileprocessing.configurations.RabbitMQConfig;
 import com.practice.springrabbitmqfileprocessing.domain.InvoiceDetail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +30,9 @@ import java.util.Map;
 public class InvoiceDetailsPublisher {
 
     private final RabbitTemplate rabbitTemplate;
+
+    private final ObjectMapper objectMapper;
+
     String value = "";
     public void insertAllInvoiceRecords(File file) {
         try {
@@ -63,7 +71,12 @@ public class InvoiceDetailsPublisher {
             // If primary key is defined.
 
             if (invoiceDetail != null) {
-                rabbitTemplate.convertAndSend(RabbitMQConfig.topicExchangeName, "invoices.created.new", invoiceDetail);
+                JsonNode invoiceJson = objectMapper.convertValue(invoiceDetail, JsonNode.class);
+                byte[] byteArray = invoiceJson.toString().getBytes();
+                MessageProperties messageProperties = new MessageProperties();
+                messageProperties.setContentType(MessageProperties.CONTENT_TYPE_JSON);
+                Message message = MessageBuilder.withBody(byteArray).andProperties(messageProperties).build();
+                rabbitTemplate.send(RabbitMQConfig.topicExchangeName, "invoices.created.new", message);
             }
         }
     }
